@@ -196,7 +196,7 @@
                         <div class="flex items-center gap-3">
                             <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
-                                <h3 class="text-lg font-bold text-white">PT Kangean Energy Indonesia (KEI)</h3>
+                                <h3 class="text-lg font-bold text-white">Wilayah Kerja EMP Group</h3>
                             </div>
                         </div>
                     </div>
@@ -509,8 +509,8 @@
             // Initialize view active menu
             switchMenu('intro');
 
-            // East Java Offshore Map Setup
-            empMap = L.map('map', { zoomControl: false }).setView([-6.956625846522847, 115.92977448133576], 7);
+            // Operational Map Setup
+            empMap = L.map('map', { zoomControl: false }).setView([-2.5, 108.0], 5);
             
             // Add zoom controls at bottom right
             L.control.zoom({ position: 'bottomright' }).addTo(empMap);
@@ -529,9 +529,29 @@
                 iconAnchor: [12, 12]
             });
 
-            // Set Marker at Offshore East Java Location
-            const offshoreMarker = L.marker([-6.956625846522847, 115.92977448133576], { icon: pulseIcon }).addTo(empMap);
-            offshoreMarker.bindPopup('<div class="text-gray-900 font-bold text-xs p-1">Wilayah Operasi Offshore EMP</div>');
+            // EMP Group Operational Area Coordinates
+            const coords = [
+                { name: "KEI", lat: -6.956625846522847, lng: 115.92977448133576 },
+                { name: "ITA", lat: 1.055754899, lng: 102.259218 },
+                { name: "BENTU", lat: 0.5478978231, lng: 101.4630103 },
+                { name: "SIAK", lat: 0.7802939843, lng: 100.7929773 },
+                { name: "KAMPAR", lat: -0.0637072309, lng: 102.3259672 },
+                { name: "GEBANG", lat: 4.118731113, lng: 98.20732654 },
+                { name: "TONGA", lat: 1.259027024, lng: 99.85646294 },
+                { name: "PGE", lat: 5.06838752, lng: 97.25574993 },
+                { name: "JAKARTA", lat: -6.219009087, lng: 106.8344576 }
+            ];
+
+            const markerGroup = L.featureGroup();
+
+            coords.forEach(area => {
+                const marker = L.marker([area.lat, area.lng], { icon: pulseIcon });
+                marker.bindPopup(`<div class="text-gray-900 font-bold text-xs p-1">${area.name}</div>`);
+                markerGroup.addLayer(marker);
+            });
+
+            markerGroup.addTo(empMap);
+            empMap.fitBounds(markerGroup.getBounds().pad(0.15));
         });
     </script>
 </body>
