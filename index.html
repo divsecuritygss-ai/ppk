@@ -128,13 +128,13 @@
                 <li><a href="#" onclick="switchMenu('scale'); return false;" id="nav-scale" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-chart-line w-5 text-center"></i> Skala Konflik</a></li>
                 <li><a href="#" onclick="switchMenu('steps'); return false;" id="nav-steps" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-list-check w-5 text-center"></i> Langkah Penanganan</a></li>
                 <li><a href="#" onclick="switchMenu('analysis'); return false;" id="nav-analysis" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-magnifying-glass-chart w-5 text-center"></i> Analisis & Pengaduan</a></li>
-                <li><a href="#" onclick="switchMenu('doc'); return false;" id="nav-doc" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-file-pdf w-5 text-center"></i> Lampiran (Dokumen PDF)</a></li>
+                <li><a href="#" onclick="switchMenu('doc'); return false;" id="nav-doc" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-file-pdf w-5 text-center"></i> Lampiran</a></li>
             </ul>
         </nav>
         
         <div class="p-5 border-t border-emerald-500/20 text-[10px] text-emerald-200/60 bg-black/20 text-center">
             <p class="font-mono mb-1">EMP-GPS-PCR-00.001-00</p>
-            <p>Dibuat dan disiapkan oleh Bli Nengah untuk mempermudah coding Anda.</p>
+            <p>Copyright HCS&GPA | 2026</p>
         </div>
     </aside>
 
@@ -400,17 +400,7 @@
 
             <!-- 9. DOKUMEN ASLI PDF -->
             <div id="sec-doc" class="content-section hidden animate-fade-in max-w-5xl mx-auto h-full flex flex-col">
-                <div class="glass-card bg-emerald-900/40 border border-emerald-500/30 p-4 mb-6 text-sm flex items-start gap-4">
-                    <div class="bg-emerald-500/20 p-2 rounded-full"><i class="fa-solid fa-file-pdf text-emerald-400 text-xl"></i></div>
-                    <div class="flex-1 text-gray-200">
-                        <p class="font-bold text-white mb-1 text-base tracking-wide">Lampiran & Dokumen Asli</p>
-                        <p class="mb-3 leading-relaxed">Termasuk <strong>Lampiran Tabel Log Konflik</strong>. Anda dapat meninjau dokumen ini secara langsung di bawah, atau mengunduhnya untuk keperluan pengarsipan dan referensi.</p>
-                        <a href="EMP-GPS-PCR-00001-00%20Prosedur%20Pencegahan%20dan%20Pena_251114_142008.pdf" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                            <i class="fa-solid fa-file-arrow-down"></i> Unduh / Buka Dokumen Penuh
-                        </a>
-                    </div>
-                </div>
-                <div class="pdf-container glass-card flex-1 min-h-[60vh] flex items-center justify-center p-1">
+                <div class="pdf-container glass-card flex-1 min-h-[75vh] flex items-center justify-center p-1">
                     <iframe src="EMP-GPS-PCR-00001-00%20Prosedur%20Pencegahan%20dan%20Pena_251114_142008.pdf" title="SOP Document Viewer" class="rounded-[0.8rem]" id="pdf-frame">
                         <div class="text-center p-6 text-gray-400">Memuat dokumen...</div>
                     </iframe>
@@ -430,7 +420,7 @@
             'scale': 'Skala Konflik',
             'steps': 'Langkah Penanganan',
             'analysis': 'Analisis & Pengaduan',
-            'doc': 'Lampiran (Dokumen PDF)'
+            'doc': 'Lampiran'
         };
 
         function toggleSidebar() {
