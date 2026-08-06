@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOP Dashboard - Emerald Glassmorphism</title>
+    <title>SOP Dashboard - EMP Group</title>
     
     <!-- Tailwind CSS (Enterprise UI) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Leaflet CSS for Interactive Map -->
+    
+    <!-- Leaflet.js Mapping Library -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        emerald: { 400: '#34d399', 500: '#10b981', 600: '#059669', 800: '#065f46', 900: '#064e3b' }
-                    },
                     animation: { blob: "blob 15s infinite" },
                     keyframes: {
                         blob: {
@@ -35,33 +34,33 @@
 
     <style>
         /* Base Configuration */
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #f8fafc; overflow-x: hidden; background-color: #022c22; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; color: #f8fafc; overflow-x: hidden; background-color: #0b1120; }
         html { scroll-behavior: smooth; }
 
         /* Glassmorphism Utilities */
         .glass-panel {
-            background: rgba(16, 185, 129, 0.03);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
         
         .glass-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(52, 211, 153, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             border-radius: 1rem;
             transition: all 0.3s ease;
         }
         
         .glass-card:hover {
             transform: translateY(-3px);
-            border: 1px solid rgba(52, 211, 153, 0.5);
-            box-shadow: 0 15px 40px 0 rgba(16, 185, 129, 0.3);
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.08));
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 40px 0 rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
         }
 
         /* Sidebar & Overlay */
@@ -72,8 +71,8 @@
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        ::-webkit-scrollbar-thumb { background: rgba(52, 211, 153, 0.4); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(52, 211, 153, 0.8); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
 
         /* Document Container */
         .pdf-container { position: relative; width: 100%; height: 78vh; border-radius: 1rem; overflow: hidden; }
@@ -81,67 +80,78 @@
         
         /* Nav Item Active State */
         .nav-active {
-            background: rgba(16, 185, 129, 0.25);
-            border: 1px solid rgba(52, 211, 153, 0.4);
-            color: #6ee7b7;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+            font-weight: 600;
         }
 
         /* Leaflet Interactive Map Customization */
         #map { height: 320px; width: 100%; border-radius: 1rem; z-index: 10; }
+        .leaflet-popup-content-wrapper {
+            background: rgba(15, 23, 42, 0.9) !important;
+            backdrop-filter: blur(12px);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem !important;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 2px 6px;
+        }
+        .leaflet-popup-tip { background: rgba(15, 23, 42, 0.9) !important; }
         
-        /* Sonar Pulse Marker Animation */
-        .pulse-marker {
-            width: 18px;
-            height: 18px;
-            background: #ef4444;
-            border: 2px solid #ffffff;
+        /* White Sonar Pulse Marker */
+        .white-pulse-marker {
+            width: 14px;
+            height: 14px;
+            background-color: #ffffff;
             border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
             position: relative;
-            box-shadow: 0 0 15px #ef4444;
         }
-        .pulse-marker::after {
-            content: "";
+        .white-pulse-marker::after {
+            content: '';
             position: absolute;
-            top: -8px;
-            left: -8px;
-            width: 30px;
-            height: 30px;
-            border: 2px solid #ef4444;
+            width: 32px;
+            height: 32px;
+            top: -9px;
+            left: -9px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            animation: pulse-ring 1.8s infinite ease-out;
+            animation: sonarPulse 1.8s infinite ease-out;
         }
-        @keyframes pulse-ring {
+        @keyframes sonarPulse {
             0% { transform: scale(0.3); opacity: 1; }
-            100% { transform: scale(1.8); opacity: 0; }
+            100% { transform: scale(1.6); opacity: 0; }
         }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden relative">
 
-    <!-- Ambient Animated Background with Blurred Offshore Rig -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#022c22]">
+    <!-- Ambient Animated Background with Blurred Offshore Rig & White Ethereal Glow -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#090d16]">
         <!-- Blurred Offshore Rig Image -->
-        <div class="absolute inset-0 scale-110 bg-[url('https://images.unsplash.com/photo-1583060777708-3486333ea647?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity blur-lg transition-all duration-1000"></div>
+        <div class="absolute inset-0 scale-110 bg-[url('https://images.unsplash.com/photo-1583060777708-3486333ea647?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat opacity-25 mix-blend-luminosity blur-lg transition-all duration-1000"></div>
         
-        <!-- Dark Emerald Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-[#022c22]/90 via-[#064e3b]/80 to-[#022c22]/95 backdrop-blur-[2px]"></div>
+        <!-- Dark Neutral Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[#090d16]/95 via-[#0f172a]/90 to-[#090d16]/95 backdrop-blur-[2px]"></div>
         
-        <!-- Ambient Animated Lighting Blobs -->
-        <div class="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-emerald-500 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-blob"></div>
-        <div class="absolute top-[20%] right-[-10%] w-[35rem] h-[35rem] bg-teal-400 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob" style="animation-delay: 2s;"></div>
-        <div class="absolute bottom-[-20%] left-[20%] w-[45rem] h-[45rem] bg-emerald-700 rounded-full mix-blend-screen filter blur-[150px] opacity-40 animate-blob" style="animation-delay: 4s;"></div>
+        <!-- Ambient Animated White & Slate Lighting Blobs -->
+        <div class="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-white/10 rounded-full mix-blend-overlay filter blur-[120px] opacity-40 animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[35rem] h-[35rem] bg-slate-200/10 rounded-full mix-blend-overlay filter blur-[120px] opacity-30 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[45rem] h-[45rem] bg-white/5 rounded-full mix-blend-overlay filter blur-[150px] opacity-50 animate-blob" style="animation-delay: 4s;"></div>
     </div>
 
     <!-- Mobile Overlay -->
     <div id="mobile-overlay" onclick="toggleSidebar()"></div>
 
     <!-- Glass Sidebar Menu -->
-    <aside id="sidebar" class="sidebar-transition fixed md:relative z-50 w-72 h-full glass-panel flex flex-col transform -translate-x-full md:translate-x-0 border-r border-emerald-500/20">
-        <div class="flex items-center justify-between p-6 border-b border-emerald-500/20">
-            <div class="font-bold text-xl tracking-wide flex items-center gap-3 text-emerald-400">
-                <div class="w-10 h-10 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center overflow-hidden">
-                    <img src="./symbol%20app%20sec.png" alt="Logo SOP PPK" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/40x40/10b981/ffffff?text=EMP'">
+    <aside id="sidebar" class="sidebar-transition fixed md:relative z-50 w-72 h-full glass-panel flex flex-col transform -translate-x-full md:translate-x-0 border-r border-white/10">
+        <div class="flex items-center justify-between p-6 border-b border-white/10">
+            <div class="font-bold text-xl tracking-wide flex items-center gap-3 text-white">
+                <div class="w-10 h-10 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.3)] flex items-center justify-center overflow-hidden border border-white/20">
+                    <img src="./symbol%20app%20sec.png" alt="Logo SOP PPK" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/40x40/ffffff/000000?text=EMP'">
                 </div>
                 SOP PPK
             </div>
@@ -151,20 +161,20 @@
         </div>
         
         <nav class="flex-1 overflow-y-auto py-6 px-4">
-            <p class="text-[10px] font-bold text-emerald-500/80 tracking-widest uppercase mb-4 px-2">Daftar Isi Prosedur</p>
+            <p class="text-[10px] font-bold text-white/70 tracking-widest uppercase mb-4 px-2">Daftar Isi Prosedur</p>
             <ul class="space-y-2 text-sm">
-                <li><a href="#" onclick="switchMenu('intro'); return false;" id="nav-intro" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-bullseye w-5 text-center"></i> Pendahuluan & Tujuan</a></li>
-                <li><a href="#" onclick="switchMenu('dist'); return false;" id="nav-dist" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-sitemap w-5 text-center"></i> Ruang Lingkup & Distribusi</a></li>
-                <li><a href="#" onclick="switchMenu('def'); return false;" id="nav-def" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-book w-5 text-center"></i> Definisi & Referensi</a></li>
-                <li><a href="#" onclick="switchMenu('roles'); return false;" id="nav-roles" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-users-gear w-5 text-center"></i> Peran & Tanggung Jawab</a></li>
-                <li><a href="#" onclick="switchMenu('scale'); return false;" id="nav-scale" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-chart-line w-5 text-center"></i> Skala Konflik</a></li>
-                <li><a href="#" onclick="switchMenu('steps'); return false;" id="nav-steps" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-list-check w-5 text-center"></i> Langkah Penanganan</a></li>
-                <li><a href="#" onclick="switchMenu('analysis'); return false;" id="nav-analysis" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-magnifying-glass-chart w-5 text-center"></i> Analisis & Pengaduan</a></li>
-                <li><a href="#" onclick="switchMenu('doc'); return false;" id="nav-doc" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/5 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-file-pdf w-5 text-center"></i> Lampiran</a></li>
+                <li><a href="#" onclick="switchMenu('intro'); return false;" id="nav-intro" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-bullseye w-5 text-center"></i> Pendahuluan & Tujuan</a></li>
+                <li><a href="#" onclick="switchMenu('dist'); return false;" id="nav-dist" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-sitemap w-5 text-center"></i> Ruang Lingkup & Distribusi</a></li>
+                <li><a href="#" onclick="switchMenu('def'); return false;" id="nav-def" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-book w-5 text-center"></i> Definisi & Referensi</a></li>
+                <li><a href="#" onclick="switchMenu('roles'); return false;" id="nav-roles" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-users-gear w-5 text-center"></i> Peran & Tanggung Jawab</a></li>
+                <li><a href="#" onclick="switchMenu('scale'); return false;" id="nav-scale" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-chart-line w-5 text-center"></i> Skala Konflik</a></li>
+                <li><a href="#" onclick="switchMenu('steps'); return false;" id="nav-steps" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-list-check w-5 text-center"></i> Langkah Penanganan</a></li>
+                <li><a href="#" onclick="switchMenu('analysis'); return false;" id="nav-analysis" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-magnifying-glass-chart w-5 text-center"></i> Analisis & Pengaduan</a></li>
+                <li><a href="#" onclick="switchMenu('doc'); return false;" id="nav-doc" class="nav-item flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 hover:bg-white/10 border border-transparent text-gray-300 hover:text-white"><i class="fa-solid fa-file-pdf w-5 text-center"></i> Lampiran</a></li>
             </ul>
         </nav>
         
-        <div class="p-5 border-t border-emerald-500/20 text-[10px] text-emerald-200/60 bg-black/20 text-center">
+        <div class="p-5 border-t border-white/10 text-[10px] text-white/60 bg-black/30 text-center">
             <p class="font-mono mb-1">EMP-GPS-PCR-00.001-00</p>
             <p>Copyright HCS&GPA | 2026</p>
         </div>
@@ -173,14 +183,14 @@
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col h-full relative z-10">
         <!-- Header -->
-        <header class="glass-panel z-30 flex items-center justify-between p-4 md:px-8 h-20 border-b border-emerald-500/20">
+        <header class="glass-panel z-30 flex items-center justify-between p-4 md:px-8 h-20 border-b border-white/10">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="md:hidden p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 hover:text-white focus:outline-none transition">
+                <button onclick="toggleSidebar()" class="md:hidden p-2 bg-white/10 border border-white/20 rounded-lg text-white hover:text-gray-200 focus:outline-none transition">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
                 <div>
                     <h1 class="font-bold text-xl md:text-2xl text-white tracking-wide drop-shadow-md" id="page-title">Pendahuluan & Tujuan</h1>
-                    <p class="text-xs text-emerald-400 hidden md:block">Pencegahan dan Penanganan Konflik</p>
+                    <p class="text-xs text-gray-300 hidden md:block">Pencegahan dan Penanganan Konflik</p>
                 </div>
             </div>
         </header>
@@ -191,31 +201,31 @@
             <!-- 1 & 2: PENDAHULUAN & TUJUAN -->
             <div id="sec-intro" class="content-section block animate-fade-in max-w-5xl mx-auto space-y-6">
                 <!-- Interactive Offshore Map Card -->
-                <div class="glass-card p-4 md:p-6 border border-emerald-500/30 relative overflow-hidden">
+                <div class="glass-card p-4 md:p-6 border border-white/15 relative overflow-hidden">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <div class="p-2 bg-emerald-500/20 rounded-lg text-emerald-400"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="p-2 bg-white/10 rounded-lg text-white border border-white/20"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
                                 <h3 class="text-lg font-bold text-white">Wilayah Kerja EMP Group</h3>
                             </div>
                         </div>
                     </div>
                     <!-- Map Canvas Container -->
-                    <div id="map" class="shadow-inner border border-emerald-500/20"></div>
+                    <div id="map" class="shadow-inner border border-white/10"></div>
                 </div>
 
                 <!-- Komitmen & Tujuan Card -->
                 <div class="glass-card p-8 md:p-10 mb-8 relative overflow-hidden">
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 border-b border-emerald-500/20 pb-4">
-                        <i class="fa-solid fa-bullseye text-emerald-400"></i> Komitmen & Tujuan
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
+                        <i class="fa-solid fa-bullseye text-white"></i> Komitmen & Tujuan
                     </h2>
                     <div class="prose prose-invert max-w-none text-gray-200 space-y-6 text-base md:text-lg">
-                        <p>Energi Mega Persada (EMP) memiliki komitmen untuk mencapai keunggulan di dalam aspek keselamatan, kesehatan kerja, perlindungan lingkungan dan pengamanan asset. Komitmen ini disebut dengan <strong class="text-emerald-400 drop-shadow">operation excellence</strong>.</p>
+                        <p>Energi Mega Persada (EMP) memiliki komitmen untuk mencapai keunggulan di dalam aspek keselamatan, kesehatan kerja, perlindungan lingkungan dan pengamanan asset. Komitmen ini disebut dengan <strong class="text-white underline decoration-white/40 underline-offset-4">operation excellence</strong>.</p>
                         <p>Tujuan dari penyusunan prosedur ini adalah untuk memberikan arahan yang sistematis dan aplikatif dalam menangani potensi konflik eksternal yang berdampak pada perusahaan. Tujuan khusus meliputi:</p>
                         <ul class="space-y-4">
-                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/5 hover:border-emerald-500/30 transition duration-300"><i class="fa-solid fa-check text-emerald-400 mt-1"></i> <span>Menjaga kelancaran operasional perusahaan di seluruh wilayah kerja.</span></li>
-                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/5 hover:border-emerald-500/30 transition duration-300"><i class="fa-solid fa-check text-emerald-400 mt-1"></i> <span>Mengurangi dampak negatif terhadap reputasi perusahaan.</span></li>
-                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/5 hover:border-emerald-500/30 transition duration-300"><i class="fa-solid fa-check text-emerald-400 mt-1"></i> <span>Mengutamakan keselamatan, kesehatan kerja, lindungan lingkungan dan keamanan perusahaan.</span></li>
+                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/10 hover:border-white/30 transition duration-300"><i class="fa-solid fa-check text-white mt-1"></i> <span>Menjaga kelancaran operasional perusahaan di seluruh wilayah kerja.</span></li>
+                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/10 hover:border-white/30 transition duration-300"><i class="fa-solid fa-check text-white mt-1"></i> <span>Mengurangi dampak negatif terhadap reputasi perusahaan.</span></li>
+                            <li class="flex items-start gap-3 bg-black/30 p-4 rounded-xl border border-white/10 hover:border-white/30 transition duration-300"><i class="fa-solid fa-check text-white mt-1"></i> <span>Mengutamakan keselamatan, kesehatan kerja, lindungan lingkungan dan keamanan perusahaan.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -226,40 +236,40 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Ruang Lingkup -->
                     <div class="glass-card p-8">
-                        <h2 class="text-2xl font-bold text-white mb-4 border-b border-emerald-500/20 pb-2"><i class="fa-solid fa-compress text-emerald-400 mr-2"></i> Ruang Lingkup</h2>
+                        <h2 class="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-compress text-white mr-2"></i> Ruang Lingkup</h2>
                         <p class="text-gray-300 leading-relaxed mb-4">Prosedur ini hanya mengatur pencegahan dan penanganan konflik antara perusahaan dengan pemangku kepentingan. Prosedur ini diberlakukan untuk induk perusahaan dan seluruh daerah operasi perusahaan, baik yang dioperasikan langsung maupun tidak langsung, mulai dari proses penerimaan informasi, menanggapi, menyelesaikan/menangani, serta dokumentasi pencegahan dan penanganan konflik.</p>
-                        <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-lg">
+                        <div class="bg-red-500/10 border border-red-500/30 p-4 rounded-lg">
                             <p class="text-sm text-gray-200"><i class="fa-solid fa-triangle-exclamation text-red-400 mr-2"></i>Jika dalam penanganan konflik berlanjut sampai ke proses hukum, maka penanganannya harus berkoordinasi dengan Departemen Legal.</p>
                         </div>
                     </div>
                     
                     <!-- Daftar Distribusi -->
                     <div class="glass-card p-8">
-                        <h2 class="text-2xl font-bold text-white mb-4 border-b border-emerald-500/20 pb-2"><i class="fa-solid fa-share-nodes text-emerald-400 mr-2"></i> Daftar Distribusi</h2>
+                        <h2 class="text-2xl font-bold text-white mb-4 border-b border-white/10 pb-2"><i class="fa-solid fa-share-nodes text-white mr-2"></i> Daftar Distribusi</h2>
                         <div class="space-y-3 mt-4">
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Vice President</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Vice President</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh General Manager</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh General Manager</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Manajer Dept. & Divisi</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Manajer Dept. & Divisi</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Area Manager</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Area Manager</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Superintendent</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Superintendent</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Supervisor</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Supervisor</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
                             <div class="flex justify-between items-center bg-black/30 hover:bg-black/40 transition p-3 rounded border border-white/5">
-                                <span class="text-gray-200 text-sm">Seluruh Pekerja</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded border border-emerald-500/30">Soft Controlled Copy</span>
+                                <span class="text-gray-200 text-sm">Seluruh Pekerja</span><span class="text-[10px] bg-white/10 text-white px-2 py-1 rounded border border-white/20">Soft Controlled Copy</span>
                             </div>
-                            <div class="flex justify-between items-center bg-emerald-500/10 p-3 rounded border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                                <span class="text-white text-sm font-semibold">ICT-Doc Control</span><span class="text-[10px] bg-emerald-600 text-white px-2 py-1 rounded">Hard Original Copy</span>
+                            <div class="flex justify-between items-center bg-white/10 p-3 rounded border border-white/30 shadow-[0_0_10px_rgba(255,255,255,0.15)]">
+                                <span class="text-white text-sm font-semibold">ICT-Doc Control</span><span class="text-[10px] bg-white text-gray-900 font-bold px-2 py-1 rounded">Hard Original Copy</span>
                             </div>
                         </div>
                     </div>
@@ -269,22 +279,22 @@
             <!-- 4. DEFINISI & REFERENSI -->
             <div id="sec-def" class="content-section hidden animate-fade-in max-w-5xl mx-auto">
                 <div class="glass-card p-8 md:p-10 mb-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-emerald-500/20 pb-4"><i class="fa-solid fa-book-open text-emerald-400 mr-3"></i> Definisi Utama</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 border-b border-white/10 pb-4"><i class="fa-solid fa-book-open text-white mr-3"></i> Definisi Utama</h2>
                     <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-black/30 p-5 rounded-xl border border-emerald-500/20 hover:bg-black/40 transition">
-                            <h3 class="text-emerald-400 font-bold text-lg mb-2">Konflik</h3>
+                        <div class="bg-black/30 p-5 rounded-xl border border-white/10 hover:bg-black/40 transition">
+                            <h3 class="text-white font-bold text-lg mb-2">Konflik</h3>
                             <p class="text-gray-300 text-sm leading-relaxed">Suatu peristiwa atau keadaan dimana terjadi pertentangan, perbedaan, atau bentrokan antara dua pihak atau lebih yang memiliki kepentingan, nilai, tujuan, kebutuhan, atau persepsi yang berbeda yang dapat berdampak langsung terhadap operasional dan reputasi perusahaan.</p>
                         </div>
-                        <div class="bg-black/30 p-5 rounded-xl border border-emerald-500/20 hover:bg-black/40 transition">
-                            <h3 class="text-emerald-400 font-bold text-lg mb-2">Pra Konflik</h3>
+                        <div class="bg-black/30 p-5 rounded-xl border border-white/10 hover:bg-black/40 transition">
+                            <h3 class="text-white font-bold text-lg mb-2">Pra Konflik</h3>
                             <p class="text-gray-300 text-sm leading-relaxed">Fase awal sebelum terjadinya konflik, tetapi terdapat tanda-tanda atau potensi terjadinya konflik yang masih dapat dicegah atau dikelola dengan cara-cara yang efektif.</p>
                         </div>
-                        <div class="bg-black/30 p-5 rounded-xl border border-emerald-500/20 hover:bg-black/40 transition">
-                            <h3 class="text-emerald-400 font-bold text-lg mb-2">Pasca Konflik</h3>
+                        <div class="bg-black/30 p-5 rounded-xl border border-white/10 hover:bg-black/40 transition">
+                            <h3 class="text-white font-bold text-lg mb-2">Pasca Konflik</h3>
                             <p class="text-gray-300 text-sm leading-relaxed">Suatu peristiwa atau keadaan setelah konflik terjadi, yaitu periode di mana pihak-pihak yang terlibat mulai menangani dampak konflik, memulihkan hubungan, dan mencegah konflik serupa di masa depan.</p>
                         </div>
-                        <div class="bg-black/30 p-5 rounded-xl border border-emerald-500/20 hover:bg-black/40 transition">
-                            <h3 class="text-emerald-400 font-bold text-lg mb-2">Kelompok Kerja</h3>
+                        <div class="bg-black/30 p-5 rounded-xl border border-white/10 hover:bg-black/40 transition">
+                            <h3 class="text-white font-bold text-lg mb-2">Kelompok Kerja</h3>
                             <p class="text-gray-300 text-sm leading-relaxed">Kelompok Kerja yang berisi pekerja perusahaan dan melapor kepada Ketua Kelompok Kerja dalam mengelola/menangani, mengkomunikasikan dan mendokumentasikan suatu konflik.</p>
                         </div>
                     </div>
@@ -295,32 +305,32 @@
             <div id="sec-roles" class="content-section hidden animate-fade-in max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4 shadow-[0_0_15px_rgba(16,185,129,0.2)]"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4 shadow-[0_0_15px_rgba(255,255,255,0.15)]"><i class="fa-solid fa-user-tie"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">SVP HCS & GPA</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Sebagai Ketua Kelompok Kerja dalam upaya pencegahan dan penanganan konflik. Menjadi pengambil keputusan utama terkait eskalasi strategis.</p>
                     </div>
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">VP Corporate Legal</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Memberikan dukungan dalam eskalasi konflik yang berhubungan dengan ranah hukum dan menyusun rekomendasi hukum sebagai dasar pengambilan keputusan oleh pimpinan.</p>
                     </div>
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4"><i class="fa-solid fa-network-wired"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-network-wired"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">Area / Operation Manager</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Memastikan prosedur dilaksanakan di wilayah kerja dan mengambil langkah awal serta mengarahkan koordinasi lintas divisi.</p>
                     </div>
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4"><i class="fa-solid fa-handshake"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-handshake"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">CSR & Comm. Manager</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Melakukan identifikasi informasi potensi konflik dan menjalin komunikasi strategis dengan masyarakat, tokoh adat, dan pemangku kepentingan.</p>
                     </div>
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-shield-halved"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">Security & GS Manager</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Menyusun strategi pengamanan wilayah dan membangun koordinasi dengan aparat keamanan (TNI, POLRI) serta instansi terkait.</p>
                     </div>
                     <div class="glass-card p-6 relative group">
-                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-4"><i class="fa-solid fa-walkie-talkie"></i></div>
+                        <div class="w-12 h-12 bg-white/10 rounded-xl border border-white/20 flex items-center justify-center text-white text-xl mb-4"><i class="fa-solid fa-walkie-talkie"></i></div>
                         <h3 class="font-bold text-xl text-white mb-2 tracking-wide">CSR Officer</h3>
                         <p class="text-gray-300 text-sm leading-relaxed">Melakukan pemantauan sosial harian, menjaga komunikasi aktif, dan mengumpulkan serta melaporkan informasi sosial secara berkala.</p>
                     </div>
@@ -337,11 +347,11 @@
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
                                 <p class="text-gray-300 text-sm">Ada keluhan via surat elektronik, telepon, pesan Whatsapp atau media sosial akibat dampak kegiatan operasional seperti kebisingan, jalan berdebu dan lainnya.</p>
                             </div>
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
                                 <p class="text-gray-300 text-sm">Operasi masih berjalan normal dan tidak ada berita negatif. Ditangani dengan verifikasi, klarifikasi, & dokumentasi ke Area Manager.</p>
                             </div>
                         </div>
@@ -354,11 +364,11 @@
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
                                 <p class="text-gray-300 text-sm">Ketidakpuasan langsung diungkapkan, dengan potensi unjuk rasa/demo pada akses masuk pekerja atau fasilitas karena penyelesaian keluhan belum sesuai harapan.</p>
                             </div>
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
                                 <p class="text-gray-300 text-sm">Operasi berjalan namun berpotensi tereskalasi (ada berita negatif lokal). Melakukan mediasi dan dialog dengan melibatkan aparat Pemda dan Kamtibnas.</p>
                             </div>
                         </div>
@@ -371,11 +381,11 @@
                         </div>
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-bolt mr-2"></i>Kondisi & Penyebab</p>
                                 <p class="text-gray-300 text-sm">Potensi pemblokiran atau merusak fasilitas perusahaan oleh masyarakat karena belum adanya kesepakatan atau penyelesaian yang dapat diterima.</p>
                             </div>
                             <div class="bg-black/20 p-5 rounded-lg">
-                                <p class="text-emerald-400 text-sm font-semibold mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
+                                <p class="text-white font-semibold text-sm mb-2"><i class="fa-solid fa-clipboard-check mr-2"></i>Dampak & Penanganan</p>
                                 <p class="text-gray-300 text-sm">Operasi terganggu, mengancam reputasi (eksposur media nasional/internasional). Penanganan dikoordinasikan dengan Forum Koordinasi Pimpinan Daerah dan instansi sektoral seperti Kejaksaan dan Dinas Tenaga Kerja.</p>
                             </div>
                         </div>
@@ -385,15 +395,15 @@
 
             <!-- 7. LANGKAH PENANGANAN -->
             <div id="sec-steps" class="content-section hidden animate-fade-in max-w-4xl mx-auto">
-                <div class="relative border-l-2 border-emerald-500/30 ml-4 md:ml-8 space-y-12 pb-8 pt-4">
+                <div class="relative border-l-2 border-white/20 ml-4 md:ml-8 space-y-12 pb-8 pt-4">
                     <div class="relative pl-10 md:pl-12">
-                        <div class="absolute -left-[21px] top-2 w-10 h-10 bg-gray-900 rounded-full border-4 border-emerald-500 flex items-center justify-center text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.5)]"><i class="fa-solid fa-binoculars"></i></div>
+                        <div class="absolute -left-[21px] top-2 w-10 h-10 bg-gray-900 rounded-full border-4 border-white flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,255,255,0.3)]"><i class="fa-solid fa-binoculars"></i></div>
                         <div class="glass-card p-6 md:p-8">
                             <h3 class="text-2xl font-bold text-white mb-4 tracking-wide">Fase Pra Konflik</h3>
                             <ul class="space-y-3 text-gray-200 text-sm">
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span>Mengumpulkan informasi isu-isu yang berkembang serta data pendukung dari lapangan, kemudian mendokumentasikannya dalam bentuk jurnal lapangan dan tabulasi data sebagai bahan analisis.</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span>Menindaklanjuti hasil pemetaan sosial melalui pelaksanaan program Pengembangan dan Pemberdayaan Masyarakat (PPM) serta program lainnya yang telah dibahas bersama pihak internal maupun eksternal melalui Forum Group Discussion (FGD).</span></li>
-                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-emerald-400 mt-1"></i> <span>Menyediakan mekanisme pelaporan yang aman dan terbuka bagi pihak internal maupun eksternal untuk menyampaikan potensi konflik.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-white mt-1"></i> <span>Mengumpulkan informasi isu-isu yang berkembang serta data pendukung dari lapangan, kemudian mendokumentasikannya dalam bentuk jurnal lapangan dan tabulasi data sebagai bahan analisis.</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-white mt-1"></i> <span>Menindaklanjuti hasil pemetaan sosial melalui pelaksanaan program Pengembangan dan Pemberdayaan Masyarakat (PPM) serta program lainnya yang telah dibahas bersama pihak internal maupun eksternal melalui Forum Group Discussion (FGD).</span></li>
+                                <li class="flex items-start gap-3"><i class="fa-solid fa-check-circle text-white mt-1"></i> <span>Menyediakan mekanisme pelaporan yang aman dan terbuka bagi pihak internal maupun eksternal untuk menyampaikan potensi konflik.</span></li>
                             </ul>
                         </div>
                     </div>
@@ -402,7 +412,7 @@
                         <div class="absolute -left-[21px] top-2 w-10 h-10 bg-gray-900 rounded-full border-4 border-yellow-500 flex items-center justify-center text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.5)]"><i class="fa-solid fa-fire-flame-curved"></i></div>
                         <div class="glass-card p-6 md:p-8">
                             <h3 class="text-2xl font-bold text-white mb-4 tracking-wide">Fase Saat Konflik</h3>
-                            <div class="bg-black/30 border border-yellow-500/20 rounded-lg p-4 mb-4 flex items-center gap-4">
+                            <div class="bg-black/30 border border-yellow-500/30 rounded-lg p-4 mb-4 flex items-center gap-4">
                                 <i class="fa-solid fa-headset text-yellow-400 text-3xl"></i>
                                 <div>
                                     <p class="text-sm text-gray-300">Media Pelaporan Keluhan/Pengaduan:</p>
@@ -435,30 +445,30 @@
             <!-- 8. ANALISIS KELUHAN -->
             <div id="sec-analysis" class="content-section hidden animate-fade-in max-w-5xl mx-auto">
                 <div class="glass-card p-8 md:p-10 mb-8">
-                    <h2 class="text-2xl font-bold text-white mb-6 border-b border-emerald-500/20 pb-4"><i class="fa-solid fa-magnifying-glass-chart text-emerald-400 mr-3"></i> Analisis Keluhan & Pengaduan</h2>
+                    <h2 class="text-2xl font-bold text-white mb-6 border-b border-white/10 pb-4"><i class="fa-solid fa-magnifying-glass-chart text-white mr-3"></i> Analisis Keluhan & Pengaduan</h2>
                     <ul class="space-y-4 text-gray-200 leading-relaxed text-lg">
-                        <li class="flex gap-4 p-4 bg-black/20 rounded-xl border border-white/5"><span class="text-emerald-400 font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Kelompok Kerja bertanggung jawab melakukan evaluasi awal terhadap setiap laporan keluhan, pengaduan dan pemberitahuan yang diterima dari wilayah kerja.</li>
-                        <li class="flex gap-4 p-4 bg-black/20 rounded-xl border border-white/5"><span class="text-emerald-400 font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Evaluasi dilakukan oleh Kelompok Kerja melalui koordinasi langsung untuk memastikan konteks permasalahan, tingkat eskalasi, serta potensi dampaknya terhadap operasional dan reputasi perusahaan.</li>
-                        <li class="flex gap-4 p-4 bg-black/20 rounded-xl border border-white/5"><span class="text-emerald-400 font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Berdasarkan hasil evaluasi, Ketua Kelompok Kerja akan memberikan arahan penanganan, termasuk langkah tanggapan cepat, mitigasi lapangan, atau tindak lanjut komunikasi strategis.</li>
-                        <li class="flex gap-4 p-4 bg-black/20 rounded-xl border border-white/5"><span class="text-emerald-400 font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Untuk penanganan konflik sesuai dokumen prosedur ini, ditentukan oleh Ketua Kelompok Kerja.</li>
+                        <li class="flex gap-4 p-4 bg-black/30 rounded-xl border border-white/10"><span class="text-white font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Kelompok Kerja bertanggung jawab melakukan evaluasi awal terhadap setiap laporan keluhan, pengaduan dan pemberitahuan yang diterima dari wilayah kerja.</li>
+                        <li class="flex gap-4 p-4 bg-black/30 rounded-xl border border-white/10"><span class="text-white font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Evaluasi dilakukan oleh Kelompok Kerja melalui koordinasi langsung untuk memastikan konteks permasalahan, tingkat eskalasi, serta potensi dampaknya terhadap operasional dan reputasi perusahaan.</li>
+                        <li class="flex gap-4 p-4 bg-black/30 rounded-xl border border-white/10"><span class="text-white font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Berdasarkan hasil evaluasi, Ketua Kelompok Kerja akan memberikan arahan penanganan, termasuk langkah tanggapan cepat, mitigasi lapangan, atau tindak lanjut komunikasi strategis.</li>
+                        <li class="flex gap-4 p-4 bg-black/30 rounded-xl border border-white/10"><span class="text-white font-bold"><i class="fa-solid fa-angle-right mt-1"></i></span> Untuk penanganan konflik sesuai dokumen prosedur ini, ditentukan oleh Ketua Kelompok Kerja.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- 9. DOKUMEN ASLI PDF (Clean Full Frame) -->
+            <!-- 9. DOKUMEN ASLI PDF -->
             <div id="sec-doc" class="content-section hidden animate-fade-in max-w-5xl mx-auto h-full flex flex-col">
-                <div class="pdf-container glass-card flex-1 min-h-[78vh] flex items-center justify-center p-1">
+                <div class="pdf-container glass-card flex-1 min-h-[75vh] flex items-center justify-center p-1 border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                     <iframe src="EMP-GPS-PCR-00001-00%20Prosedur%20Pencegahan%20dan%20Pena_251114_142008.pdf" title="SOP Document Viewer" class="rounded-[0.8rem]" id="pdf-frame">
-                        <div class="text-center p-6 text-gray-400">Memuat dokumen...</div>
+                        <div class="text-center p-6 text-gray-300">
+                            Browser Anda memblokir penampil PDF lokal.<br>
+                            <a href="EMP-GPS-PCR-00001-00%20Prosedur%20Pencegahan%20dan%20Pena_251114_142008.pdf" target="_blank" class="text-white underline font-bold mt-2 inline-block">Buka File Dokumen Langsung</a>
+                        </div>
                     </iframe>
                 </div>
             </div>
 
         </div>
     </main>
-
-    <!-- Leaflet Map Library -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <!-- UI Controller Logic -->
     <script>
@@ -487,50 +497,23 @@
             });
             document.getElementById('sec-' + sectionId).classList.remove('hidden');
             const activeNav = document.getElementById('nav-' + sectionId);
-            activeNav.classList.add('nav-active');
+            if (activeNav) {
+                activeNav.classList.add('nav-active');
+            }
             document.getElementById('page-title').innerText = menuTitles[sectionId];
-            
-            // Auto close mobile menu
             if (window.innerWidth < 768) {
                 const sidebar = document.getElementById('sidebar');
                 if (!sidebar.classList.contains('-translate-x-full')) {
                     toggleSidebar();
                 }
             }
-
-            // Invalidate map size when switching back to intro
-            if (sectionId === 'intro' && typeof empMap !== 'undefined') {
-                setTimeout(() => { empMap.invalidateSize(); }, 200);
-            }
         }
 
-        let empMap;
-        document.addEventListener("DOMContentLoaded", () => {
-            // Initialize view active menu
-            switchMenu('intro');
+        var mapInstance = null;
+        function initOperationalMap() {
+            if (mapInstance !== null) return; // Prevent double initialization
 
-            // Operational Map Setup
-            empMap = L.map('map', { zoomControl: false }).setView([-2.5, 108.0], 5);
-            
-            // Add zoom controls at bottom right
-            L.control.zoom({ position: 'bottomright' }).addTo(empMap);
-
-            // Dark Matter Basemap Tiles
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap &copy; CARTO',
-                maxZoom: 19
-            }).addTo(empMap);
-
-            // Pulse Marker Setup
-            const pulseIcon = L.divIcon({
-                className: '',
-                html: '<div class="pulse-marker"></div>',
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            // EMP Group Operational Area Coordinates
-            const coords = [
+            var coords = [
                 { name: "KEI", lat: -6.956625846522847, lng: 115.92977448133576 },
                 { name: "ITA", lat: 1.055754899, lng: 102.259218 },
                 { name: "BENTU", lat: 0.5478978231, lng: 101.4630103 },
@@ -542,17 +525,46 @@
                 { name: "JAKARTA", lat: -6.219009087, lng: 106.8344576 }
             ];
 
-            const markerGroup = L.featureGroup();
+            // Center map roughly around Indonesian Archipelago
+            mapInstance = L.map('map', {
+                attributionControl: false,
+                zoomControl: true
+            }).setView([-1.5, 108.0], 5);
 
-            coords.forEach(area => {
-                const marker = L.marker([area.lat, area.lng], { icon: pulseIcon });
-                marker.bindPopup(`<div class="text-gray-900 font-bold text-xs p-1">${area.name}</div>`);
-                markerGroup.addLayer(marker);
+            // CARTO Dark Matter Tiles for High Contrast
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                maxZoom: 18,
+                subdomains: 'abcd'
+            }).addTo(mapInstance);
+
+            // Create custom white glowing pulse icon
+            var customPulseIcon = L.divIcon({
+                className: 'custom-white-marker',
+                html: '<div class="white-pulse-marker"></div>',
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
             });
 
-            markerGroup.addTo(empMap);
-            empMap.fitBounds(markerGroup.getBounds().pad(0.15));
-        });
+            var bounds = [];
+
+            // Add all markers to map
+            coords.forEach(function(item) {
+                var marker = L.marker([item.lat, item.lng], { icon: customPulseIcon }).addTo(mapInstance);
+                marker.bindPopup("<div class='font-bold text-center py-1 px-2'>" + item.name + "</div>");
+                bounds.push([item.lat, item.lng]);
+            });
+
+            // Auto-fit map boundaries to fit all markers elegantly
+            if (bounds.length > 0) {
+                mapInstance.fitBounds(bounds, { padding: [30, 30] });
+            }
+        }
+
+        // Initialize Default View
+        window.onload = function() {
+            switchMenu('intro');
+            initOperationalMap();
+        };
     </script>
 </body>
 </html>
